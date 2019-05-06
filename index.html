@@ -5,10 +5,31 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="style.css">
     <title>Document</title>
 </head>
 <body>
-    <div class="PetShop"></div>
-    <script src="js"></script>
+    <template id="pet-template">
+        <li>
+            <div>
+                <strong class="petType"></strong>
+                <span class="petAttributes"></span>
+            </div>
+            <button class="addToCartBtn">Add to cart</button>
+        </li>
+    </template>
+    <div class="PetShop">
+        <ul class="allCats"></ul>
+        <ul class="greaterPricePets"></ul>
+        <ul class="fluffyWhitePets"></ul>
+    </div>
+    <script src="model/pet.js"></script>
+    <script src="model/cat.js"></script>
+    <script src="model/dog.js"></script>
+    <script src="model/hamster.js"></script>
+    <script src="model/data.json"></script>
+    <script src="view/petShopView.js"></script>
+    <script src="controller/petShopController.js"></script>
+    <script src="index.js"></script>
 </body>
 </html>

@@ -1,0 +1,23 @@
+.allCats,
+.greaterPricePets,
+.fluffyWhitePets {
+    width: 25%;
+    padding: 10px 10px 10px 20px;
+    margin: 2%;
+    border: 1px solid lightgray;
+    border-radius: 10px;
+    display: inline-block;
+    vertical-align: top;
+}
+.allCats>li,
+.greaterPricePets>li,
+.fluffyWhitePets>li {
+    margin: 10px 0;
+}
+button {
+    padding: 3px 10px;
+    border-radius: 5px;
+    border: 1px solid lightseagreen;
+    background: lightseagreen;
+    margin: 5px;
+}
