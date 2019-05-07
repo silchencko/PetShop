@@ -1,4 +1,9 @@
-class PetShopController {
+import { Cat } from "/./model/cat.js";
+import { Dog } from "/./model/dog.js";
+import { Hamster } from "/./model/hamster.js";
+import PetShopView from "/./view/petShopView.js";
+
+export default class PetShopController {
     constructor() {
         this.view = new PetShopView();
         this.pets = null;

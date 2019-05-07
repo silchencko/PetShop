@@ -1,4 +1,4 @@
-class PetShopView {
+export default class PetShopView {
     constructor() {
         this.container = document.querySelector(".PetShop");
         this.cart = document.querySelector(".cart");
