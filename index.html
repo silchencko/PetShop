@@ -18,6 +18,35 @@
             <button class="addToCartBtn">Add to cart</button>
         </li>
     </template>
+
+    <template id="cartPopup-template">
+        <div class="cartPopup">
+            <ul class="cartPets"></ul>
+            <button class="popupCloseBtn">Close</button>
+        </div>
+    </template>
+
+    <template id="cartPet-template">
+            <li>
+                <div>
+                    <strong class="petType"></strong>
+                    <span class="petAttributes"></span>
+                </div>
+                <button class="addToCartBtn">Delete</button>
+            </li>
+        </template>
+
+    <header>
+        <div class="headerName"><h1>PetShop</h1></div>
+        <div class="cart">
+            <div class="cart-content">
+                <img src="assets/cart.png" alt="cart" title="cart"></img>
+                <span class="petsInCart"></span>
+                <span> pets in cart</span>
+            </div>
+            <button class="clearCart">Clear</button>
+        </div>
+    </header>
     <div class="PetShop">
         <ul class="allCats"></ul>
         <ul class="greaterPricePets"></ul>

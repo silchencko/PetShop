@@ -7,11 +7,16 @@ export default class PetShopController {
     constructor() {
         this.view = new PetShopView();
         this.pets = null;
+        this.catsList = [];
+        this.greatPriceList = [];
+        this.fluffyWhiteList = [];
     }
     execute() {
         console.log("execute");
+        this.view.setPetsAmountInCart();
         this.getRequest();
-        // this.view.setViewCallback(elem, 'click', this.addAnimalToCart);
+        this.setPopupCallback();
+        this.view.setCallback(this.view.cartClearBtn, "click", this.view.clearCart);
     }
     getRequest() {
         fetch('https://silchencko.github.io/data.json')
@@ -30,11 +35,30 @@ export default class PetShopController {
             }
         })
     }
+    // Fillup start lists of pets; gether in one collection and set onclick callback 
     setPets(petsList) {
-        this.view.setPetsList(this.getCats(petsList), this.view.allCatsList);
-        this.view.setPetsList(this.getGreaterPricePets(petsList), this.view.greaterPriceList);
-        this.view.setPetsList(this.getfluffyAndWhitePets(petsList), this.view.fluffyWhiteList);
-        // this.view.render(cats);
+        const catsList = this.getCats(petsList);
+        const greatPriceList = this.getGreaterPricePets(petsList);
+        const fluffyWhiteList = this.getfluffyAndWhitePets(petsList);
+        this.addPetsToList(catsList, this.view.allCatsList);
+        this.addPetsToList(greatPriceList, this.view.greaterPriceList);
+        this.addPetsToList(fluffyWhiteList, this.view.fluffyWhiteList);
+    }
+    addPetsToList(pets, container) {
+        pets.forEach(pet => {
+            const node = this.view.setPetsList(pet, container);
+            this.view.setPetCallback("click", node, pet);
+        })
+    }
+    addPetToCart() {
+        debugger;
+        const key = localStorage.length;
+        localStorage[key] = JSON.stringify(this);
+        this.view.setPetsInCart(localStorage.length);
+    }
+    setPetClickCallback(pets) {
+        // debugger;
+    Array.from(pets).forEach(pet => this.view.setPetCallback("click", pet));
     }
     getCats(petsList) {
         return petsList.filter(pet => pet instanceof Cat);
@@ -51,7 +75,7 @@ export default class PetShopController {
             return pet.color === "white" || pet.isFluffy;
         })
     }
-    addAnimalToCart() {
-
+    setPopupCallback() {
+        this.view.setCallback(this.view.cart, "click", this.view.showCartPopup);
     }
 }

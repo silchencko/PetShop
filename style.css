@@ -1,3 +1,25 @@
+body {
+    margin: 0;
+}
+header {
+    /* height: 50px; */
+    background: blueviolet;
+}
+.headerName {
+    display: inline-block;
+    width: 70%;
+    text-align: center;
+    box-sizing: border-box;
+    /* padding: 20px; */
+}
+.cart {
+    display: inline-block;
+    width: 25%;
+    font-size: 26px;
+}
+.cart img {
+    width: 30px;
+}
 .allCats,
 .greaterPricePets,
 .fluffyWhitePets {
@@ -20,4 +42,23 @@ button {
     border: 1px solid lightseagreen;
     background: lightseagreen;
     margin: 5px;
+    cursor: pointer;
+}
+.cart {
+    cursor: pointer;
+}
+.cart-content {
+    display: inline-block;
+}
+.cartPopup {
+    position: absolute;
+    margin: auto;
+    width: 80%;
+    top: 50px;
+    left: 0;
+    right: 0;
+    padding: 20px;
+    background-color: darkcyan;
+    border: 1px solid lightslategray;
+    border-radius: 10px;
 }
