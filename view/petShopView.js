@@ -8,14 +8,11 @@ export default class PetShopView {
         this.greaterPriceList = document.querySelector('.greaterPricePets');
         this.fluffyWhiteList =  document.querySelector('.fluffyWhitePets');
     }
-    render(content) {
+    render() {
         console.log(this.container);
     }
-    setPetsAmountInCart() {
-        document.querySelector(".petsInCart").innerHTML = localStorage.length;
-    }
     setCallback(elem, event, callback) {
-        elem.addEventListener(event, callback);
+        elem.addEventListener(event, callback.bind(this));
     }
     setPetCallback(event, elem, pet) {
         const btn = elem.querySelector(".addToCartBtn");
@@ -38,36 +35,45 @@ export default class PetShopView {
         container.appendChild(instance);
         return container.lastElementChild;
     }
-    setBackgroundBlur(container, blurAmount) {
-        container.style.filter = blurAmount;
+    setBackgroundBlur(blurAmount) {
+        const content = document.querySelector(".content");
+        content.style.filter = `blur(${blurAmount})`;
     }
-    setClosePopupCallback(popup) {
-        const btn = instance.querySelector(".popupCloseBtn");
-        btn.addEventListener("click", () => popup.remove());
-        this.setBackgroundBlur(document.body, "0");
+    
+    // Cart
+    setPetsAmountInCart() {
+        document.querySelector(".petsInCart").innerHTML = localStorage.length;
     }
     showCartPopup() {
-        const popup = document.getElementById("cartPopup-template");
-        const instance = document.importNode(popup.content, true);
+        const popupTmplt = document.getElementById("cartPopup-template");
+        const instanceCart = document.importNode(popupTmplt.content, true);
 
-        const btn = instance.querySelector(".popupCloseBtn");
-        btn.addEventListener("click", () => popup.remove());
+        this.fillupCartPets(Array.from(localStorage), instanceCart);
+        document.body.appendChild(instanceCart);
+        const popup = document.body.querySelector(".cartPopup");
 
-        // const pets = Array.from(localStorage);
-        // console.log(pets);
-        // const cartPetTmplt = document.getElementById('cartPet-template');
-        // pets.forEach(pet => {
-        //     const instance = document.importNode(cartPetTmplt.content, true);
-        //     console.log(pet);
-        //     instance.querySelector(".petAttributes").innerHTML = `Price: ${pet.value.price || ""} Color: ${pet.value.color || ""}`;
-        //     cartPets.appendChild(instance);
-        // });
-
-        document.body.appendChild(instance);
-        // document.body.style.filter = "2px";
+        this.setBackgroundBlur("2px");
+        this.setClosePopupCallback(popup);
     } 
+    setClosePopupCallback(popup) {
+        const btn = popup.querySelector(".popupCloseBtn");
+        debugger;
+        btn.addEventListener("click", () => {
+            popup.remove();
+            this.setBackgroundBlur("0");
+        });
+    }
+    fillupCartPets(pets, parentInstance) {
+        const cartPetTmplt = document.getElementById('cartPet-template');
+        pets.forEach(pet => {
+            pet = JSON.parse(pet);
+            const instance = document.importNode(cartPetTmplt.content, true);
+            instance.querySelector(".petAttributes").innerHTML = `Price: ${pet.price || ""} Color: ${pet.color || ""}`;
+            parentInstance.querySelector(".cartPets").appendChild(instance);
+        });
+    }
     clearCart() {
         localStorage.clear();
-        document.querySelector(".petsInCart").innerHTML = localStorage.length;
+        this.setPetsAmountInCart();
     }
 }

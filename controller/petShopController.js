@@ -13,9 +13,10 @@ export default class PetShopController {
     }
     execute() {
         console.log("execute");
-        this.view.setPetsAmountInCart();
         this.getRequest();
         this.setPopupCallback();
+        //Cart
+        this.view.setPetsAmountInCart();
         this.view.setCallback(this.view.cartClearBtn, "click", this.view.clearCart);
     }
     getRequest() {
@@ -50,15 +51,8 @@ export default class PetShopController {
             this.view.setPetCallback("click", node, pet);
         })
     }
-    addPetToCart() {
-        debugger;
-        const key = localStorage.length;
-        localStorage[key] = JSON.stringify(this);
-        this.view.setPetsInCart(localStorage.length);
-    }
     setPetClickCallback(pets) {
-        // debugger;
-    Array.from(pets).forEach(pet => this.view.setPetCallback("click", pet));
+        Array.from(pets).forEach(pet => this.view.setPetCallback("click", pet));
     }
     getCats(petsList) {
         return petsList.filter(pet => pet instanceof Cat);
@@ -74,6 +68,13 @@ export default class PetShopController {
             let b = pet.isFluffy === true;
             return pet.color === "white" || pet.isFluffy;
         })
+    }
+
+    // Cart
+    addPetToCart() {
+        const key = localStorage.length;
+        localStorage[key] = JSON.stringify(this);
+        this.view.setPetsInCart(localStorage.length);
     }
     setPopupCallback() {
         this.view.setCallback(this.view.cart, "click", this.view.showCartPopup);
