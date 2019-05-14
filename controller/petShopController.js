@@ -20,7 +20,7 @@ export default class PetShopController {
         this.view.setCallback(this.view.cartClearBtn, "click", this.view.clearCart);
     }
     getRequest() {
-        fetch('https://silchencko.github.io/data.json')
+        fetch('../model/data.json')
         .then(response => response.json())
         .then(data => this.setPets(this.parseResponse(data)))
         .catch(error => console.error(error))
