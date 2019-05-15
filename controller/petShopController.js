@@ -1,11 +1,12 @@
-import { Cat } from "/./model/cat.js";
-import { Dog } from "/./model/dog.js";
-import { Hamster } from "/./model/hamster.js";
-import PetShopView from "/./view/petShopView.js";
+import { PetShopView } from "/./view/petShopView.js";
+import { PetShopModel } from "/./model/petShopModel.js";
+import { Cart } from "/./model/cart.js";
 
 export default class PetShopController {
     constructor() {
         this.view = new PetShopView();
+        this.petShopModel = {};
+        this.cart = {};
         this.pets = null;
         this.catsList = [];
         this.greatPriceList = [];
@@ -13,70 +14,98 @@ export default class PetShopController {
     }
     execute() {
         console.log("execute");
-        this.getRequest();
+        this.getPetsRequest();
+        this.getCartRequest();
         this.setPopupCallback();
-        //Cart
-        this.view.setPetsAmountInCart();
-        this.view.setCallback(this.view.cartClearBtn, "click", this.view.clearCart);
+
+        //Clear Cart
+        this.view.setCallback(this.view.cartClearBtn, "click", this.deleteAllPetsFromCart.bind(this));
     }
-    getRequest() {
-        fetch('../model/data.json')
+
+    // Requests
+
+    getPetsRequest() {
+        fetch('http://localhost:3000/pets')
         .then(response => response.json())
-        .then(data => this.setPets(this.parseResponse(data)))
+        .then(data => {
+            this.petShopModel = new PetShopModel(data);
+            this.petShopModel.init();
+            this.setPets();
+        })
         .catch(error => console.error(error))
     }
-    parseResponse(data) {
-        return data.map(pet => {
-            if (pet.type === "cat") {
-                return new Cat(pet.color, pet.price, pet.name, pet.isFluffy);
-            } else if (pet.type === "dog") {
-                return new Dog(pet.color, pet.price, pet.name);
-            } else if (pet.type === "hamster") {
-                return new Hamster(pet.color, pet.price, pet.isFluffy);
-            }
+    getCartRequest() {
+        fetch('http://localhost:3000/cart')
+        .then(response => response.json())
+        .then(data => {
+            this.cart = new Cart(data);
+            this.view.setPetsAmountInCart(this.cart.getCounter());
         })
+        .catch(error => console.error(error))
     }
-    // Fillup start lists of pets; gether in one collection and set onclick callback 
-    setPets(petsList) {
-        const catsList = this.getCats(petsList);
-        const greatPriceList = this.getGreaterPricePets(petsList);
-        const fluffyWhiteList = this.getfluffyAndWhitePets(petsList);
+    postPetToCart(pet) {
+        fetch('http://localhost:3000/cart', {
+            headers: {
+               'Accept': 'application/json',
+               'Content-Type': 'application/json'
+            },
+            method: "POST",
+            body: JSON.stringify(pet)
+        })
+        .then(response => response.json())
+        .then(data => {
+            this.cart.update(data);
+            this.view.setPetsAmountInCart(this.cart.getCounter());
+            })
+        .catch(error => console.error(error))
+    }
+    deletePetFromCart(id) {
+        fetch(`http://localhost:3000/cart/${id}`, {method: "DELETE"})
+        .then(response => response.json())
+        .then(data => {
+            this.cart.update(data);
+            this.view.setPetsAmountInCart(this.cart.getCounter());
+            })
+        .catch(error => console.error(error))
+    }
+    deleteAllPetsFromCart() {
+        fetch(`http://localhost:3000/cart`, {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            method: "PUT",
+            body: JSON.stringify([])
+        })
+        .then(response => response.json())
+        .then(data => {
+            this.cart.update(Array.from(data));
+            this.view.setPetsAmountInCart(this.cart.getCounter());
+            })
+        .catch(error => console.error(error))
+    }
+    
+    // Fillup start lists of pets; gather into one collection and set onclick callback 
+    
+    setPets() {
+        const catsList = this.petShopModel.getCats();
+        const greatPriceList = this.petShopModel.getGreaterPricePets();
+        const fluffyWhiteList = this.petShopModel.getfluffyAndWhitePets();
         this.addPetsToList(catsList, this.view.allCatsList);
         this.addPetsToList(greatPriceList, this.view.greaterPriceList);
         this.addPetsToList(fluffyWhiteList, this.view.fluffyWhiteList);
     }
     addPetsToList(pets, container) {
         pets.forEach(pet => {
-            const node = this.view.setPetsList(pet, container);
-            this.view.setPetCallback("click", node, pet);
-        })
-    }
-    setPetClickCallback(pets) {
-        Array.from(pets).forEach(pet => this.view.setPetCallback("click", pet));
-    }
-    getCats(petsList) {
-        return petsList.filter(pet => pet instanceof Cat);
-    }
-    getGreaterPricePets(petsList) {
-        const sumPrice = petsList.reduce((sum, pet) => sum + pet.price, 0);
-        const averagePrice = sumPrice / petsList.length;
-        return petsList.filter(pet => pet.price > averagePrice);
-    }
-    getfluffyAndWhitePets(petsList) {
-        return petsList.filter(pet => {
-            let a = pet.color === "white";
-            let b = pet.isFluffy === true;
-            return pet.color === "white" || pet.isFluffy;
-        })
+            this.view.setPetsList(pet, container, () => this.postPetToCart(pet));
+        });
     }
 
-    // Cart
-    addPetToCart() {
-        const key = localStorage.length;
-        localStorage[key] = JSON.stringify(this);
-        this.view.setPetsInCart(localStorage.length);
-    }
+    // Show Cart with added pets
     setPopupCallback() {
-        this.view.setCallback(this.view.cart, "click", this.view.showCartPopup);
+        this.view.setCallback(this.view.cart, "click", () => {
+            this.view.showCartPopup(this.cart);
+            this.cart.getPets().forEach(pet => this.view.fillupCartPets(pet, () => this.deletePetFromCart(pet.id)));
+        });
     }
 }

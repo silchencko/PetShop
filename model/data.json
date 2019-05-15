@@ -1,59 +1,88 @@
-[
+{
+  "pets": [
     {
-        "type": "cat",
-        "color": "grey",
-        "price": 15,
-        "name": "Vasya",
-        "isFluffy": true
+      "type": "cat",
+      "color": "grey",
+      "price": 15,
+      "name": "Vasya",
+      "isFluffy": true
     },
     {
-        "type": "cat",
-        "color": "red",
-        "price": 13,
-        "name": "Pich",
-        "isFluffy": false
+      "type": "cat",
+      "color": "red",
+      "price": 13,
+      "name": "Pich",
+      "isFluffy": false
     },
     {
-        "type": "cat",
-        "color": "calico",
-        "price": 15,
-        "name": "John",
-        "isFluffy": true
+      "type": "cat",
+      "color": "calico",
+      "price": 15,
+      "name": "John",
+      "isFluffy": true
     },
     {
-        "type": "hamster",
-        "color": "grey",
-        "price": 5,
-        "isFluffy": true
+      "type": "hamster",
+      "color": "grey",
+      "price": 5,
+      "isFluffy": true
     },
     {
-        "type": "hamster",
-        "color": "white",
-        "price": 3,
-        "isFluffy": true
+      "type": "hamster",
+      "color": "white",
+      "price": 3,
+      "isFluffy": true
     },
     {
-        "type": "hamster",
-        "color": "grey",
-        "price": 5,
-        "isFluffy": false
+      "type": "hamster",
+      "color": "grey",
+      "price": 5,
+      "isFluffy": false
     },
     {
-        "type": "dog",
-        "color": "grey",
-        "price": 25,
-        "name": "Rex"
+      "type": "dog",
+      "color": "grey",
+      "price": 25,
+      "name": "Rex"
     },
     {
-        "type": "dog",
-        "color": "black",
-        "price": 23,
-        "name": "King"
+      "type": "dog",
+      "color": "black",
+      "price": 23,
+      "name": "King"
     },
     {
-        "type": "dog",
-        "color": "brown",
-        "price": 25,
-        "name": "Lion"
+      "type": "dog",
+      "color": "brown",
+      "price": 25,
+      "name": "Lion"
     }
-]
+  ],
+  "cart": [
+    {
+      "color": "grey",
+      "price": 15,
+      "name": "Vasya",
+      "isFluffy": true,
+      "id": 1
+    },
+    {
+      "color": "grey",
+      "price": 25,
+      "name": "Rex",
+      "id": 2
+    },
+    {
+      "color": "grey",
+      "price": 5,
+      "isFluffy": true,
+      "id": 3
+    },
+    {
+      "color": "grey",
+      "price": 25,
+      "name": "Rex",
+      "id": 4
+    }
+  ]
+}
